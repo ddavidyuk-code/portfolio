@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Wpadaj – spontaniczne spotkania w Twojej okolicy</title>
+<meta name="description" content="Wpadaj to aplikacja, która pokazuje, co dzieje się dziś w Twojej okolicy. Dołącz do spotkania jednym kliknięciem albo zaproś innych.">
+<meta property="og:title" content="Wpadaj – spontaniczne spotkania w Twojej okolicy">
+<meta property="og:description" content="Siatkówka w parku, planszówki w kawiarni, wspólne bieganie. Dołącz jednym kliknięciem.">
+<link rel="stylesheet" href="fonts/fonts.css">
+<style>
+:root{
+  /* layout: asymmetric hero (copy left, phone right), bento feature grid, single light theme */
+  --ink:#1c1638; --paper:#f7f4fb; --card:#ffffff; --accent:#f2452a; --sun:#ffd447; --lilac:#e4dcf7; --muted:#5d5676;
+  --display:'Bricolage Grotesque',system-ui,sans-serif; --body:'Figtree',system-ui,sans-serif;
+  --r:22px; --wrap:1140px;
+  color-scheme:light;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--paper);color:var(--ink);font:400 17px/1.6 var(--body)}
+img,svg{max-width:100%}
+a{color:inherit}
+:focus-visible{outline:3px solid var(--accent);outline-offset:3px;border-radius:6px}
+.wrap{max-width:var(--wrap);margin:0 auto;padding:0 20px}
+h1,h2,h3{font-family:var(--display);line-height:1.05;margin:0;text-wrap:balance;letter-spacing:-.02em}
+h1{font-size:clamp(2.5rem,6.4vw,4.6rem);font-weight:800}
+h2{font-size:clamp(1.9rem,4vw,3rem);font-weight:700}
+h3{font-size:1.3rem;font-weight:700;line-height:1.2}
+p{margin:0}
+.btn{display:inline-flex;align-items:center;gap:.5em;padding:.9em 1.4em;border-radius:999px;font:700 1rem var(--body);text-decoration:none;border:2px solid var(--ink);cursor:pointer;transition:transform .15s}
+.btn:hover{transform:translateY(-2px)}
+.btn--main{background:var(--accent);color:#fff;border-color:var(--accent)}
+.btn--ghost{background:transparent;color:var(--ink)}
+
+header{position:sticky;top:0;z-index:10;background:color-mix(in srgb,var(--paper) 88%,transparent);backdrop-filter:blur(10px)}
+.nav{display:flex;align-items:center;justify-content:space-between;gap:16px;padding-block:14px}
+.logo{font:800 1.5rem var(--display);text-decoration:none;letter-spacing:-.03em}
+.logo i{display:inline-block;width:.5em;height:.5em;border-radius:50%;background:var(--accent);margin-left:.08em}
+.nav ul{display:flex;gap:26px;list-style:none;margin:0;padding:0;font-weight:600}
+.nav ul a{text-decoration:none}
+.nav ul a:hover{text-decoration:underline;text-decoration-thickness:2px;text-underline-offset:5px}
+.nav .btn{padding:.6em 1.1em;font-size:.95rem}
+
+.hero{display:grid;grid-template-columns:1.1fr .9fr;gap:40px;align-items:center;padding-block:56px 72px}
+.eyebrow{display:inline-block;background:var(--lilac);padding:.35em .9em;border-radius:999px;font-weight:600;font-size:.9rem;margin-bottom:22px}
+.hero p.lead{font-size:1.2rem;max-width:34em;margin:22px 0 30px;color:var(--muted)}
+.cta{display:flex;flex-wrap:wrap;gap:12px}
+.stores{display:flex;flex-wrap:wrap;gap:10px;margin-top:26px;font-size:.9rem;color:var(--muted)}
+.stores span{border:1.5px dashed #b9b0d3;border-radius:12px;padding:.45em .9em}
+
+.stage{position:relative;display:grid;place-items:center;min-height:560px}
+.stage::before{content:"";position:absolute;width:min(430px,92%);aspect-ratio:1;border-radius:50%;background:var(--sun)}
+.stage::after{content:"";position:absolute;right:4%;top:6%;width:84px;height:84px;border-radius:26px;background:var(--accent);transform:rotate(14deg)}
+.phone{position:relative;z-index:1;width:290px;background:var(--ink);border-radius:42px;padding:12px;transform:rotate(-4deg);box-shadow:0 30px 60px -20px rgba(28,22,56,.55)}
+.screen{background:var(--paper);border-radius:32px;padding:18px 14px 16px;display:grid;gap:12px}
+.screen .top{display:flex;justify-content:space-between;align-items:baseline;font:700 1.15rem var(--display)}
+.screen .top small{font:600 .75rem var(--body);color:var(--muted)}
+.chips{display:flex;gap:6px;font-size:.72rem;font-weight:700}
+.chips span{padding:.3em .75em;border-radius:999px;background:var(--card);border:1.5px solid var(--lilac)}
+.chips span.on{background:var(--ink);color:#fff;border-color:var(--ink)}
+.meet{background:var(--card);border-radius:18px;padding:12px 12px 12px 14px;display:grid;gap:4px;border-left:6px solid var(--accent)}
+.meet:nth-of-type(2){border-left-color:var(--sun)}
+.meet:nth-of-type(3){border-left-color:#7c5cff}
+.meet b{font:700 1rem var(--display)}
+.meet span{font-size:.78rem;color:var(--muted)}
+.meet .row{display:flex;justify-content:space-between;align-items:center;margin-top:6px}
+.faces{display:flex}
+.faces i{width:24px;height:24px;border-radius:50%;border:2px solid var(--card);margin-left:-7px;background:var(--lilac);font:700 .62rem/20px var(--body);text-align:center;font-style:normal}
+.faces i:first-child{margin-left:0;background:var(--sun)}
+.go{background:var(--accent);color:#fff;font:700 .75rem var(--body);padding:.45em 1em;border-radius:999px}
+
+section{padding:72px 0}
+.head{max-width:40em;margin-bottom:40px}
+.head p{color:var(--muted);margin-top:14px;font-size:1.1rem}
+.steps{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;counter-reset:s;list-style:none;margin:0;padding:0}
+.steps li{counter-increment:s;background:var(--card);border-radius:var(--r);padding:28px;display:grid;gap:10px;align-content:start}
+.steps li::before{content:counter(s);font:800 3.2rem/1 var(--display);color:var(--accent)}
+.steps li:nth-child(2){transform:translateY(22px)}
+.steps p,.bento p{color:var(--muted)}
+
+.bento{display:grid;grid-template-columns:repeat(6,1fr);gap:18px}
+.tile{border-radius:var(--r);padding:28px;display:grid;gap:10px;align-content:start;background:var(--card)}
+.tile.a{grid-column:span 4;background:var(--ink);color:#fff}
+.tile.a p{color:#cfc8e6}
+.tile.b{grid-column:span 2;background:var(--sun)}
+.tile.b p{color:#4a3d05}
+.tile.c{grid-column:span 2;background:var(--lilac)}
+.tile.d{grid-column:span 2}
+.tile.e{grid-column:span 2;background:var(--accent);color:#fff}
+.tile.e p{color:#ffe3dd}
+.meter{display:flex;gap:6px;margin-top:8px}
+.meter i{flex:1;height:12px;border-radius:6px;background:rgba(28,22,56,.18)}
+.meter i.f{background:var(--ink)}
+.hours{display:grid;grid-template-columns:repeat(12,1fr);gap:5px;margin-top:10px;align-items:end;height:74px}
+.hours i{background:#463c78;border-radius:5px}
+.hours i.hot{background:var(--sun)}
+
+.faq{display:grid;grid-template-columns:.8fr 1.2fr;gap:40px;align-items:start}
+details{background:var(--card);border-radius:18px;padding:18px 22px;margin-bottom:12px}
+summary{cursor:pointer;font:700 1.1rem var(--display);list-style:none;display:flex;justify-content:space-between;gap:16px}
+summary::after{content:"+";font-size:1.4rem;line-height:1;color:var(--accent)}
+details[open] summary::after{content:"–"}
+details p{margin-top:10px;color:var(--muted)}
+
+.join{background:var(--ink);color:#fff;border-radius:36px;padding:clamp(32px,6vw,64px);display:grid;grid-template-columns:1fr 1fr;gap:32px;align-items:center}
+.join p{color:#cfc8e6;margin-top:14px}
+form{display:grid;gap:12px}
+label{font-weight:600;font-size:.95rem}
+input[type=email]{width:100%;padding:1em 1.2em;border-radius:999px;border:2px solid transparent;font:inherit;background:#fff;color:var(--ink)}
+.msg{min-height:1.5em;font-size:.95rem;color:var(--sun)}
+.hp{position:absolute;left:-9999px}
+
+footer{padding:36px 0 48px;color:var(--muted);font-size:.9rem}
+footer .wrap{display:flex;flex-wrap:wrap;gap:12px 32px;justify-content:space-between}
+.concept{background:var(--lilac);border-radius:14px;padding:.8em 1.1em;color:var(--ink)}
+
+@media (max-width:900px){
+  .hero,.faq,.join{grid-template-columns:1fr}
+  .nav ul{display:none}
+  .stage{min-height:520px}
+  .steps{grid-template-columns:1fr}
+  .steps li:nth-child(2){transform:none}
+  .tile.a,.tile.b,.tile.c,.tile.d,.tile.e{grid-column:span 6}
+  section{padding:52px 0}
+}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}.btn{transition:none}}
+</style>
+</head>
+<body>
+<header>
+  <div class="wrap nav">
+    <a class="logo" href="#top" aria-label="Wpadaj, strona główna">wpadaj<i></i></a>
+    <nav aria-label="Główna nawigacja">
+      <ul>
+        <li><a href="#jak">Jak to działa</a></li>
+        <li><a href="#funkcje">Funkcje</a></li>
+        <li><a href="#pytania">Pytania</a></li>
+      </ul>
+    </nav>
+    <a class="btn btn--main" href="#lista">Zapisz się</a>
+  </div>
+</header>
+
+<main id="top">
+  <div class="wrap hero">
+    <div>
+      <span class="eyebrow">Aplikacja mobilna · wkrótce na Androida i iOS</span>
+      <h1>Masz wolny wieczór? Ktoś obok też.</h1>
+      <p class="lead">Wpadaj pokazuje, co dzieje się dziś w Twojej okolicy: siatkówka w parku, planszówki w kawiarni, wspólne bieganie. Dołączasz jednym kliknięciem albo zapraszasz innych.</p>
+      <div class="cta">
+        <a class="btn btn--main" href="#lista">Zapisz się na listę oczekujących</a>
+        <a class="btn btn--ghost" href="#jak">Zobacz, jak działa</a>
+      </div>
+      <div class="stores" aria-label="Dostępność w sklepach">
+        <span>Google Play – wkrótce</span>
+        <span>App Store – wkrótce</span>
+      </div>
+    </div>
+    <div class="stage" aria-hidden="true">
+      <div class="phone">
+        <div class="screen">
+          <div class="top">Dziś w okolicy <small>Mokotów</small></div>
+          <div class="chips"><span class="on">Wszystko</span><span>Sport</span><span>Planszówki</span></div>
+          <div class="meet"><b>Siatkówka plażowa</b><span>Pola Mokotowskie · 18:30</span>
+            <div class="row"><div class="faces"><i>A</i><i>K</i><i>M</i><i>+1</i></div><span class="go">Wpadam</span></div></div>
+          <div class="meet"><b>Wieczór planszówek</b><span>Kawiarnia przy Puławskiej · 19:00</span>
+            <div class="row"><div class="faces"><i>O</i><i>T</i><i>J</i></div><span class="go">Wpadam</span></div></div>
+          <div class="meet"><b>Bieg 5 km, spokojne tempo</b><span>Bulwary Wiślane · 20:15</span>
+            <div class="row"><div class="faces"><i>P</i><i>Z</i></div><span class="go">Wpadam</span></div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <section id="jak">
+    <div class="wrap">
+      <div class="head">
+        <h2>Od pomysłu do spotkania w trzech krokach</h2>
+        <p>Bez grup, ankiet i ustalania terminu przez tydzień.</p>
+      </div>
+      <ol class="steps">
+        <li><h3>Wybierz, na co masz ochotę</h3><p>Sport, planszówki, spacer, kino. Zaznacz, co lubisz, a zobaczysz pasujące spotkania w promieniu kilku kilometrów.</p></li>
+        <li><h3>Dołącz albo zaproponuj</h3><p>Kliknij „Wpadam” przy gotowym spotkaniu lub dodaj własne w pół minuty: co, gdzie, o której i dla ilu osób.</p></li>
+        <li><h3>Spotkajcie się</h3><p>Czat grupy otwiera się automatycznie. Ustalacie szczegóły i widzicie się na miejscu.</p></li>
+      </ol>
+    </div>
+  </section>
+
+  <section id="funkcje">
+    <div class="wrap">
+      <div class="head"><h2>Zrobione pod spotkania „na dziś”</h2></div>
+      <div class="bento">
+        <div class="tile a">
+          <h3>Tylko najbliższe 24 godziny</h3>
+          <p>Na mapie widzisz wyłącznie spotkania, które zaczynają się dziś lub jutro rano. Najwięcej dzieje się po pracy.</p>
+          <div class="hours" aria-hidden="true"><i style="height:18%"></i><i style="height:14%"></i><i style="height:22%"></i><i style="height:30%"></i><i style="height:26%"></i><i style="height:38%"></i><i style="height:52%"></i><i class="hot" style="height:78%"></i><i class="hot" style="height:100%"></i><i class="hot" style="height:86%"></i><i style="height:48%"></i><i style="height:24%"></i></div>
+        </div>
+        <div class="tile b">
+          <h3>Limit miejsc</h3>
+          <p>Organizator ustala, ile osób może przyjść. Widzisz, ile miejsc zostało.</p>
+          <div class="meter" aria-label="Zajęte 4 z 6 miejsc"><i class="f"></i><i class="f"></i><i class="f"></i><i class="f"></i><i></i><i></i></div>
+        </div>
+        <div class="tile c">
+          <h3>Czat tylko dla uczestników</h3>
+          <p>Rozmowa otwiera się po dołączeniu i znika dobę po spotkaniu.</p>
+        </div>
+        <div class="tile d">
+          <h3>Potwierdzone profile</h3>
+          <p>Numer telefonu sprawdzamy SMS-em. Po spotkaniu możesz ocenić każdego uczestnika.</p>
+        </div>
+        <div class="tile e">
+          <h3>Za darmo</h3>
+          <p>Dołączanie do spotkań i ich tworzenie nic nie kosztuje.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="pytania">
+    <div class="wrap faq">
+      <div class="head"><h2>Najczęstsze pytania</h2><p>Nie znalazłeś odpowiedzi? Napisz: <a href="mailto:hej@wpadaj.example">hej@wpadaj.example</a></p></div>
+      <div>
+        <details open><summary>W jakich miastach działa aplikacja?</summary><p>Startujemy w Warszawie, Krakowie i Wrocławiu. Kolejne miasta dodamy, gdy zbierze się w nich wystarczająco dużo chętnych.</p></details>
+        <details><summary>Czy muszę znać pozostałych uczestników?</summary><p>Nie. Większość spotkań jest otwarta. Organizator może też ograniczyć spotkanie do swoich znajomych.</p></details>
+        <details><summary>Jak dbacie o bezpieczeństwo?</summary><p>Potwierdzamy numer telefonu, pokazujemy oceny po spotkaniach i pozwalamy zgłosić każdy profil. Zgłoszenia sprawdzamy w ciągu doby.</p></details>
+        <details><summary>Czy mogę dodać spotkanie cykliczne?</summary><p>Tak. Wystarczy zaznaczyć powtarzanie co tydzień, a spotkanie pojawi się na mapie dzień przed każdym terminem.</p></details>
+      </div>
+    </div>
+  </section>
+
+  <section id="lista">
+    <div class="wrap">
+      <div class="join">
+        <div>
+          <h2>Bądź wśród pierwszych</h2>
+          <p>Zostaw adres e-mail. Napiszemy raz, w dniu premiery w Twoim mieście.</p>
+        </div>
+        <form id="waitlist" novalidate>
+          <label for="email">Adres e-mail</label>
+          <input id="email" name="email" type="email" autocomplete="email" placeholder="ty@przyklad.pl" required>
+          <input class="hp" id="firma" name="firma" type="text" tabindex="-1" autocomplete="off" aria-hidden="true">
+          <button class="btn btn--main" type="submit">Dajcie znać o starcie</button>
+          <p class="msg" id="msg" role="status"></p>
+        </form>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <p class="concept">Projekt koncepcyjny. Marka, dane i treści są fikcyjne. Projekt i wykonanie: Danyil Davydyuk.</p>
+    <p><a href="../index.html">← Wróć do portfolio</a></p>
+  </div>
+</footer>
+
+<script>
+document.getElementById('waitlist').addEventListener('submit', function (e) {
+  e.preventDefault();
+  var email = document.getElementById('email');
+  var msg = document.getElementById('msg');
+  if (!email.value || !email.checkValidity()) {
+    msg.textContent = 'Wpisz poprawny adres e-mail, na przykład ty@przyklad.pl.';
+    email.focus();
+    return;
+  }
+  msg.textContent = 'To wersja demonstracyjna: adres nie został nigdzie wysłany.';
+});
+</script>
+</body>
+</html>
