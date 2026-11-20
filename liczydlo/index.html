@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Liczydło – analityka danych dla restauracji i barów</title>
+<meta name="description" content="Analiza przychodów i kosztów lokali gastronomicznych. Co miesiąc raport i trzy konkretne decyzje: w karcie, cenach i grafiku.">
+<meta property="og:title" content="Liczydło – analityka danych dla restauracji i barów">
+<meta property="og:description" content="Food cost, marża na daniach, sprzedaż według godzin. Raport, z którego wynika, co zmienić w tym miesiącu.">
+<link rel="stylesheet" href="fonts/fonts.css">
+<style>
+:root{
+  /* layout: dark single-theme, serif headlines over mono data panels, 12-col feel with left-aligned copy */
+  --bg:#0d1220; --panel:#151c2e; --line:#27314b; --text:#eceff5; --muted:#909ab0; --gold:#e9b65a; --teal:#5fc9d6; --alert:#ef6b5b;
+  --display:'Instrument Serif',Georgia,serif; --body:'IBM Plex Sans',system-ui,sans-serif; --mono:'IBM Plex Mono',ui-monospace,monospace;
+  --wrap:1160px;
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--text);font:400 17px/1.65 var(--body)}
+a{color:inherit}
+:focus-visible{outline:2px solid var(--gold);outline-offset:3px}
+.wrap{max-width:var(--wrap);margin:0 auto;padding:0 22px}
+h1,h2,h3{margin:0;text-wrap:balance}
+h1,h2{font-family:var(--display);font-weight:400;line-height:1.05;letter-spacing:-.01em}
+h1{font-size:clamp(2.7rem,6vw,4.9rem)}
+h2{font-size:clamp(2rem,4vw,3.1rem)}
+h3{font:600 1.1rem/1.3 var(--body)}
+h1 em,h2 em{font-style:italic;color:var(--gold)}
+p{margin:0}
+.kicker{font:500 .78rem var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--gold)}
+.muted{color:var(--muted)}
+.btn{display:inline-block;padding:.85em 1.35em;font:600 1rem var(--body);text-decoration:none;border:1px solid var(--gold);border-radius:4px;cursor:pointer;transition:background .15s,color .15s}
+.btn--main{background:var(--gold);color:#17120a}
+.btn--main:hover{background:#f4c877}
+.btn--line{color:var(--gold);background:transparent}
+.btn--line:hover{background:rgba(233,182,90,.12)}
+
+header{border-bottom:1px solid var(--line);position:sticky;top:0;background:rgba(13,18,32,.9);backdrop-filter:blur(8px);z-index:5}
+.nav{display:flex;align-items:center;justify-content:space-between;gap:20px;padding-block:14px}
+.logo{font:400 1.7rem var(--display);text-decoration:none}
+.logo span{color:var(--gold)}
+.nav ul{display:flex;gap:28px;list-style:none;margin:0;padding:0;font-size:.95rem}
+.nav ul a{text-decoration:none;color:var(--muted)}
+.nav ul a:hover{color:var(--text)}
+.nav .btn{padding:.55em 1em;font-size:.92rem}
+
+.hero{display:grid;grid-template-columns:1fr 1.02fr;gap:48px;align-items:center;padding-block:72px 84px}
+.hero .lead{font-size:1.18rem;color:var(--muted);max-width:32em;margin:24px 0 32px}
+.cta{display:flex;flex-wrap:wrap;gap:12px}
+
+.panel{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:22px}
+.panel-head{display:flex;justify-content:space-between;gap:12px;font:500 .76rem var(--mono);color:var(--muted);letter-spacing:.06em;text-transform:uppercase;margin-bottom:18px}
+.panel-head b{color:var(--teal);font-weight:500}
+.kpis{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:18px}
+.kpi{border:1px solid var(--line);border-radius:8px;padding:14px}
+.kpi span{display:block;font-size:.8rem;color:var(--muted)}
+.kpi strong{display:block;font:500 1.7rem/1.2 var(--mono);font-variant-numeric:tabular-nums;margin:4px 0 2px}
+.kpi small{font:400 .74rem var(--mono);color:var(--teal)}
+svg{display:block;width:100%;height:auto}
+.grid-line{stroke:var(--line);stroke-width:1}
+.target{stroke:var(--gold);stroke-width:1.2;stroke-dasharray:4 4}
+.series{fill:none;stroke:var(--teal);stroke-width:2.4;stroke-linejoin:round;stroke-linecap:round}
+.area{fill:var(--teal);opacity:.12}
+.dot{fill:var(--bg);stroke:var(--teal);stroke-width:2.4}
+.t{font:500 10px var(--mono);fill:var(--muted)}
+.t.hi{fill:var(--text)}
+.t.g{fill:var(--gold)}
+.bar{fill:#34405f}
+.bar.low{fill:var(--alert)}
+.bar.top{fill:var(--teal)}
+
+section{padding:84px 0;border-top:1px solid var(--line)}
+.head{display:grid;gap:14px;max-width:44em;margin-bottom:44px}
+
+.flow{display:grid;grid-template-columns:repeat(4,1fr);list-style:none;margin:0;padding:0;border:1px solid var(--line);border-radius:10px;overflow:hidden;counter-reset:f}
+.flow li{counter-increment:f;padding:26px 24px 28px;border-left:1px solid var(--line);display:grid;gap:10px;align-content:start;position:relative}
+.flow li:first-child{border-left:0}
+.flow li::before{content:"0" counter(f);font:500 .8rem var(--mono);color:var(--gold)}
+.flow li:not(:last-child)::after{content:"→";position:absolute;right:-.62em;top:22px;background:var(--bg);color:var(--gold);font:500 1rem var(--mono);padding:2px 4px;z-index:1}
+.flow h3{font:400 1.75rem/1.1 var(--display)}
+.flow p{color:var(--muted);font-size:.97rem}
+
+.reports{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+.report{display:grid;gap:16px;align-content:start}
+.report .note{font-size:.95rem;border-left:2px solid var(--gold);padding-left:12px}
+.rows{display:grid;gap:9px;font-size:.86rem}
+.rowbar{display:grid;grid-template-columns:9.2em 1fr 3em;gap:10px;align-items:center}
+.rowbar i{display:block;height:10px;border-radius:2px;background:#34405f}
+.rowbar i.low{background:var(--alert)}
+.rowbar b{font:500 .82rem var(--mono);text-align:right;font-variant-numeric:tabular-nums}
+
+.about{display:grid;grid-template-columns:.9fr 1.1fr;gap:56px;align-items:start}
+.about p+p{margin-top:14px}
+.who{list-style:none;margin:26px 0 0;padding:0;display:flex;flex-wrap:wrap;gap:8px}
+.who li{border:1px solid var(--line);border-radius:999px;padding:.35em .95em;font-size:.9rem;color:var(--muted)}
+.case{display:grid;gap:18px}
+.case dl{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:0}
+.case dl div{border-top:1px solid var(--line);padding-top:12px}
+.case dt{font-size:.82rem;color:var(--muted)}
+.case dd{margin:4px 0 0;font:500 1.45rem var(--mono);font-variant-numeric:tabular-nums}
+.case dd small{font-size:.8rem;color:var(--teal)}
+.tag{font:500 .72rem var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+
+.contact{display:grid;grid-template-columns:.85fr 1.15fr;gap:56px;align-items:start}
+form{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.field{display:grid;gap:6px}
+.field.full{grid-column:1/-1}
+label{font-size:.88rem;color:var(--muted)}
+input,select,textarea{width:100%;background:var(--panel);border:1px solid var(--line);border-radius:4px;color:var(--text);font:inherit;padding:.75em .9em}
+input:focus,select:focus,textarea:focus{border-color:var(--gold);outline:none}
+textarea{min-height:120px;resize:vertical}
+.msg{grid-column:1/-1;min-height:1.5em;color:var(--teal);font-size:.95rem}
+.hp{position:absolute;left:-9999px}
+
+footer{border-top:1px solid var(--line);padding:30px 0 44px;font-size:.88rem;color:var(--muted)}
+footer .wrap{display:flex;flex-wrap:wrap;gap:10px 32px;justify-content:space-between}
+
+@media (max-width:960px){
+  .hero,.about,.contact{grid-template-columns:1fr;gap:36px}
+  .flow{grid-template-columns:1fr 1fr}
+  .flow li:nth-child(3){border-left:0}
+  .flow li:nth-child(n+3){border-top:1px solid var(--line)}
+  .flow li::after{display:none}
+  .reports{grid-template-columns:1fr}
+  .nav ul{display:none}
+  section{padding:60px 0}
+}
+@media (max-width:520px){
+  .kpis{grid-template-columns:1fr}
+  .flow{grid-template-columns:1fr}
+  .flow li{border-left:0}
+  .flow li+li{border-top:1px solid var(--line)}
+  form{grid-template-columns:1fr}
+  .case dl{grid-template-columns:1fr}
+}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+</style>
+</head>
+<body>
+<header>
+  <div class="wrap nav">
+    <a class="logo" href="#top">Liczydło<span>.</span></a>
+    <nav aria-label="Główna nawigacja">
+      <ul>
+        <li><a href="#proces">Proces</a></li>
+        <li><a href="#raporty">Raporty</a></li>
+        <li><a href="#o-mnie">O mnie</a></li>
+        <li><a href="#case">Case study</a></li>
+      </ul>
+    </nav>
+    <a class="btn btn--line" href="#kontakt">Umów rozmowę</a>
+  </div>
+</header>
+
+<main id="top">
+  <div class="wrap hero">
+    <div>
+      <p class="kicker">Analityka dla restauracji i barów</p>
+      <h1>Sala pełna, a na koncie pusto? <em>Policzmy to.</em></h1>
+      <p class="lead">Analizuję przychody i koszty lokali gastronomicznych. Co miesiąc dostajesz raport, z którego wynika jedno: co zmienić w karcie, cenach i grafiku.</p>
+      <div class="cta">
+        <a class="btn btn--main" href="#kontakt">Umów bezpłatną rozmowę</a>
+        <a class="btn btn--line" href="#raporty">Zobacz przykładowe raporty</a>
+      </div>
+    </div>
+    <div class="panel" role="img" aria-label="Przykładowy raport miesięczny: food cost spadł z 35,8 procent w maju do 31,4 procent w październiku, cel to 30 procent">
+      <div class="panel-head"><span>Raport miesięczny · październik</span><b>dane przykładowe</b></div>
+      <div class="kpis">
+        <div class="kpi"><span>Food cost</span><strong>31,4%</strong><small>▼ 0,8 pp m/m</small></div>
+        <div class="kpi"><span>Marża brutto</span><strong>64,8%</strong><small>▲ 1,2 pp m/m</small></div>
+        <div class="kpi"><span>Średni rachunek</span><strong>87 zł</strong><small>▲ 3 zł m/m</small></div>
+      </div>
+      <svg viewBox="0 0 320 132" aria-hidden="true">
+        <line class="grid-line" x1="20" y1="10" x2="300" y2="10"/>
+        <line class="grid-line" x1="20" y1="55" x2="300" y2="55"/>
+        <line class="target" x1="20" y1="100" x2="300" y2="100"/>
+        <path class="area" d="M20 25.4 L76 34.4 L132 46 L188 61.4 L244 71.7 L300 82 L300 100 L20 100 Z"/>
+        <path class="series" d="M20 25.4 L76 34.4 L132 46 L188 61.4 L244 71.7 L300 82"/>
+        <circle class="dot" cx="300" cy="82" r="4.5"/>
+        <text class="t hi" x="20" y="18">35,8%</text>
+        <text class="t hi" x="300" y="72" text-anchor="end">31,4%</text>
+        <text class="t g" x="300" y="113" text-anchor="end">cel 30%</text>
+        <text class="t" x="20" y="126">maj</text><text class="t" x="76" y="126" text-anchor="middle">cze</text><text class="t" x="132" y="126" text-anchor="middle">lip</text><text class="t" x="188" y="126" text-anchor="middle">sie</text><text class="t" x="244" y="126" text-anchor="middle">wrz</text><text class="t" x="300" y="126" text-anchor="end">paź</text>
+      </svg>
+    </div>
+  </div>
+
+  <section id="proces">
+    <div class="wrap">
+      <div class="head">
+        <p class="kicker">Jak pracuję</p>
+        <h2>Dane → Analiza → Raport → <em>Decyzje</em></h2>
+      </div>
+      <ol class="flow">
+        <li><h3>Dane</h3><p>Eksport z systemu POS, faktury od dostawców, grafik pracy. Wystarczy dostęp tylko do odczytu.</p></li>
+        <li><h3>Analiza</h3><p>Liczę food cost każdej pozycji, marżę na daniach, sprzedaż według godzin i koszt pracy na zmianę.</p></li>
+        <li><h3>Raport</h3><p>Raz w miesiącu dostajesz 6–8 slajdów. Każdy odpowiada na jedno pytanie, bez tabel na czterdzieści kolumn.</p></li>
+        <li><h3>Decyzje</h3><p>Na półgodzinnej rozmowie ustalamy trzy zmiany na kolejny miesiąc. Po miesiącu sprawdzam, co dały.</p></li>
+      </ol>
+    </div>
+  </section>
+
+  <section id="raporty">
+    <div class="wrap">
+      <div class="head">
+        <p class="kicker">Przykładowe raporty</p>
+        <h2>Trzy slajdy, które zwykle zmieniają najwięcej</h2>
+        <p class="muted">Wszystkie liczby poniżej są przykładowe.</p>
+      </div>
+      <div class="reports">
+        <article class="panel report">
+          <div class="panel-head"><span>Marża na daniach</span><b>top 5 sprzedaży</b></div>
+          <div class="rows">
+            <div class="rowbar"><span>Lemoniada</span><i style="width:86%"></i><b>86%</b></div>
+            <div class="rowbar"><span>Pierogi ruskie</span><i style="width:74%"></i><b>74%</b></div>
+            <div class="rowbar"><span>Burger wołowy</span><i style="width:68%"></i><b>68%</b></div>
+            <div class="rowbar"><span>Makaron z krewetkami</span><i style="width:52%"></i><b>52%</b></div>
+            <div class="rowbar"><span>Stek z antrykotu</span><i class="low" style="width:41%"></i><b>41%</b></div>
+          </div>
+          <p class="note">Stek sprzedaje się najlepiej, a zarabia najmniej. Do decyzji: cena, gramatura albo dostawca.</p>
+        </article>
+        <article class="panel report">
+          <div class="panel-head"><span>Sprzedaż według godzin</span><b>śr. dzień roboczy</b></div>
+          <svg viewBox="0 0 300 130" role="img" aria-label="Sprzedaż według godzin od 12 do 22: szczyty o 13 i o 20, dołek między 15 a 17">
+            <rect class="bar" x="8" y="66" width="20" height="40"/><rect class="bar" x="34" y="21" width="20" height="85"/><rect class="bar" x="60" y="36" width="20" height="70"/>
+            <rect class="bar low" x="86" y="84" width="20" height="22"/><rect class="bar low" x="112" y="88" width="20" height="18"/><rect class="bar" x="138" y="76" width="20" height="30"/>
+            <rect class="bar" x="164" y="41" width="20" height="65"/><rect class="bar" x="190" y="11" width="20" height="95"/><rect class="bar top" x="216" y="6" width="20" height="100"/>
+            <rect class="bar" x="242" y="34" width="20" height="72"/><rect class="bar" x="268" y="68" width="20" height="38"/>
+            <text class="t" x="18" y="122" text-anchor="middle">12</text><text class="t" x="96" y="122" text-anchor="middle">15</text><text class="t" x="122" y="122" text-anchor="middle">16</text><text class="t" x="226" y="122" text-anchor="middle">20</text><text class="t" x="278" y="122" text-anchor="middle">22</text>
+          </svg>
+          <p class="note">Między 15:00 a 17:00 obsługa kosztuje więcej, niż lokal sprzedaje. Do decyzji: grafik albo oferta popołudniowa.</p>
+        </article>
+        <article class="panel report">
+          <div class="panel-head"><span>Koszt pracy na zmianę</span><b>% sprzedaży</b></div>
+          <div class="rows">
+            <div class="rowbar"><span>Pt, wieczór</span><i style="width:36%"></i><b>18%</b></div>
+            <div class="rowbar"><span>Sb, wieczór</span><i style="width:40%"></i><b>20%</b></div>
+            <div class="rowbar"><span>Nd, lunch</span><i style="width:52%"></i><b>26%</b></div>
+            <div class="rowbar"><span>Wt, lunch</span><i style="width:62%"></i><b>31%</b></div>
+            <div class="rowbar"><span>Pn, wieczór</span><i class="low" style="width:88%"></i><b>44%</b></div>
+          </div>
+          <p class="note">W poniedziałkowy wieczór prawie połowa sprzedaży idzie na obsadę. Do decyzji: krótsza zmiana albo zamknięta kuchnia.</p>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section id="o-mnie">
+    <div class="wrap about">
+      <div class="head" style="margin:0">
+        <p class="kicker">O mnie</p>
+        <h2>Marta Lis, analityczka, która <em>pracowała na sali</em></h2>
+      </div>
+      <div>
+        <p>Zaczynałam jako kelnerka, potem prowadziłam bar. Od dziewięciu lat pracuję z danymi finansowymi, od pięciu wyłącznie dla gastronomii.</p>
+        <p class="muted">Wiem, że właściciel lokalu nie ma czasu na arkusze. Dlatego nie wysyłam tabel, tylko wnioski i propozycję decyzji. Pracuję z jednym lokalem albo z małą siecią, zawsze na danych, które już masz.</p>
+        <ul class="who" aria-label="Dla kogo">
+          <li>Restauracje</li><li>Bary i puby</li><li>Kawiarnie</li><li>Food trucki</li><li>Sieci do 10 lokali</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section id="case">
+    <div class="wrap about">
+      <div class="head" style="margin:0">
+        <p class="kicker">Case study</p>
+        <h2>Bistro na 60 miejsc: food cost niższy o 5 punktów w kwartał</h2>
+        <p class="tag">Przykład poglądowy · dane fikcyjne</p>
+      </div>
+      <div class="case">
+        <p>Lokal miał pełną salę w weekendy i stratę na koniec miesiąca. W danych z POS wyszło, że trzy najpopularniejsze dania mają najniższą marżę, a karta liczy 54 pozycje, z których 19 sprzedaje się rzadziej niż raz dziennie.</p>
+        <p class="muted">Ustaliliśmy trzy zmiany: krótsza karta, nowe ceny czterech dań i zamiana jednego dostawcy mięsa.</p>
+        <dl>
+          <div><dt>Food cost</dt><dd>36,2 → 31,0% <small>▼ 5,2 pp</small></dd></div>
+          <div><dt>Pozycje w karcie</dt><dd>54 → 38</dd></div>
+          <div><dt>Czas</dt><dd>3 mies.</dd></div>
+        </dl>
+      </div>
+    </div>
+  </section>
+
+  <section id="kontakt">
+    <div class="wrap contact">
+      <div class="head" style="margin:0">
+        <p class="kicker">Kontakt</p>
+        <h2>Pół godziny rozmowy, <em>bez zobowiązań</em></h2>
+        <p class="muted">Opowiesz o lokalu, a ja powiem, jakie dane warto sprawdzić w pierwszej kolejności.</p>
+        <p class="muted">marta@liczydlo.example<br>+48 000 000 000</p>
+      </div>
+      <form id="contact" novalidate>
+        <div class="field"><label for="name">Imię</label><input id="name" name="name" autocomplete="given-name" required></div>
+        <div class="field"><label for="email">E-mail</label><input id="email" name="email" type="email" autocomplete="email" required></div>
+        <div class="field"><label for="venue">Nazwa lokalu</label><input id="venue" name="venue"></div>
+        <div class="field"><label for="seats">Liczba miejsc</label>
+          <select id="seats" name="seats"><option>do 30</option><option>30–60</option><option>60–120</option><option>ponad 120</option></select></div>
+        <div class="field full"><label for="message">Co chcesz policzyć?</label><textarea id="message" name="message"></textarea></div>
+        <input class="hp" id="website" name="website" tabindex="-1" autocomplete="off" aria-hidden="true">
+        <div class="field full"><button class="btn btn--main" type="submit">Wyślij zapytanie</button></div>
+        <p class="msg" id="msg" role="status"></p>
+      </form>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <p>Projekt koncepcyjny. Marka, osoba, dane i liczby są fikcyjne. Projekt i wykonanie: Danyil Davydyuk.</p>
+    <p><a href="../index.html">← Wróć do portfolio</a></p>
+  </div>
+</footer>
+
+<script>
+document.getElementById('contact').addEventListener('submit', function (e) {
+  e.preventDefault();
+  var name = document.getElementById('name');
+  var email = document.getElementById('email');
+  var msg = document.getElementById('msg');
+  if (!name.value.trim()) { msg.textContent = 'Podaj imię, żebym wiedziała, jak się do Ciebie zwracać.'; name.focus(); return; }
+  if (!email.value || !email.checkValidity()) { msg.textContent = 'Wpisz poprawny adres e-mail.'; email.focus(); return; }
+  msg.textContent = 'To wersja demonstracyjna: wiadomość nie została nigdzie wysłana.';
+});
+</script>
+</body>
+</html>
