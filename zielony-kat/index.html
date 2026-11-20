@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Zielony Kąt – rośliny i donice na zamówienie</title>
+<meta name="description" content="Rośliny, donice i gotowe zestawy dobrane do mieszkania, biura lub lokalu. Wyślij zdjęcie wnętrza i zapytaj o propozycję.">
+<meta property="og:title" content="Zielony Kąt – rośliny i donice na zamówienie">
+<meta property="og:description" content="Dobieramy rośliny i donice do światła, miejsca i czasu, jaki masz na podlewanie.">
+<link rel="stylesheet" href="fonts/fonts.css">
+<style>
+:root{
+  /* layout: calm single-column rhythm, arch-topped picture frames, lots of air; light theme only */
+  --bg:#f2f0e8; --surface:#fbfaf6; --ink:#1e3329; --leaf:#4c8358; --sage:#d3dfcb; --sand:#ddd0b9; --muted:#586a5e;
+  --display:'Marcellus',Georgia,serif; --body:'Karla',system-ui,sans-serif;
+  --wrap:1120px;
+  color-scheme:light;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--ink);font:400 18px/1.65 var(--body)}
+a{color:inherit}
+:focus-visible{outline:2px solid var(--leaf);outline-offset:4px}
+.wrap{max-width:var(--wrap);margin:0 auto;padding:0 24px}
+h1,h2,h3{font-family:var(--display);font-weight:400;margin:0;line-height:1.12;text-wrap:balance}
+h1{font-size:clamp(2.4rem,5.4vw,4.2rem)}
+h2{font-size:clamp(1.9rem,3.6vw,2.8rem)}
+h3{font-size:1.35rem}
+p{margin:0}
+.muted{color:var(--muted)}
+.btn{display:inline-block;background:var(--ink);color:var(--surface);padding:.85em 1.6em;border-radius:999px;text-decoration:none;font:600 1rem var(--body);border:0;cursor:pointer;transition:background .2s}
+.btn:hover{background:var(--leaf)}
+.link{font-weight:600;text-underline-offset:5px}
+
+.nav{display:flex;justify-content:space-between;align-items:center;gap:20px;padding-block:22px}
+.logo{font:400 1.5rem var(--display);text-decoration:none;display:flex;align-items:center;gap:.45em}
+.logo svg{width:26px;height:26px}
+.nav ul{display:flex;gap:30px;list-style:none;margin:0;padding:0}
+.nav ul a{text-decoration:none}
+.nav ul a:hover{text-decoration:underline;text-underline-offset:6px}
+
+.hero{display:grid;grid-template-columns:1fr 1fr;gap:56px;align-items:center;padding-block:36px 84px}
+.hero .lead{font-size:1.15rem;color:var(--muted);max-width:30em;margin:24px 0 32px}
+.cta{display:flex;flex-wrap:wrap;gap:14px 26px;align-items:center}
+.arch{background:var(--sage);border-radius:999px 999px 18px 18px;display:flex;align-items:flex-end;justify-content:center;padding:44px 20px 0;overflow:hidden}
+.arch svg{width:33%;height:auto;margin:0 -2%}
+.arch svg:nth-child(2){width:42%}
+.shelf{height:14px;background:var(--sand);border-radius:0 0 18px 18px;margin-top:-1px}
+
+.facts{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--sand);border-block:1px solid var(--sand)}
+.facts div{background:var(--bg);padding:26px 24px}
+.facts b{display:block;font:400 1.2rem var(--display);margin-bottom:4px}
+.facts span{color:var(--muted);font-size:.98rem}
+
+section{padding:92px 0}
+.head{max-width:36em;margin-bottom:48px;display:grid;gap:14px}
+.group{display:grid;grid-template-columns:200px 1fr;gap:32px;padding:36px 0;border-top:1px solid var(--sand)}
+.group>header p{color:var(--muted);font-size:.98rem;margin-top:8px}
+.cards{display:grid;grid-template-columns:repeat(3,1fr);gap:22px}
+.card{display:grid;gap:14px;align-content:start}
+.frame{background:var(--surface);border-radius:999px 999px 14px 14px;aspect-ratio:4/5;display:flex;align-items:flex-end;justify-content:center;padding:18% 12% 0;overflow:hidden}
+.frame.sage{background:var(--sage)}
+.frame.sand{background:#e9dfcc}
+.frame svg{width:100%;height:auto}
+.frame.duo svg{width:58%;margin:0 -8%}
+.card p{color:var(--muted);font-size:.98rem}
+
+.how{background:var(--ink);color:var(--surface)}
+.how .muted{color:#b9c7bc}
+.steps{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(4,1fr);gap:28px;counter-reset:s}
+.steps li{counter-increment:s;border-top:1px solid #49604f;padding-top:20px;display:grid;gap:8px;align-content:start}
+.steps li::before{content:counter(s);font:400 2.4rem/1 var(--display);color:#a9c9a6}
+.steps p{color:#b9c7bc;font-size:.98rem}
+
+.contact{display:grid;grid-template-columns:.9fr 1.1fr;gap:64px;align-items:start}
+.contact address{font-style:normal;margin-top:22px;color:var(--muted)}
+form{display:grid;grid-template-columns:1fr 1fr;gap:18px;background:var(--surface);padding:32px;border-radius:18px}
+.field{display:grid;gap:6px}
+.field.full{grid-column:1/-1}
+label{font-weight:600;font-size:.95rem}
+label small{font-weight:400;color:var(--muted)}
+input,textarea{width:100%;font:inherit;color:var(--ink);background:var(--bg);border:1px solid var(--sand);border-radius:10px;padding:.7em .9em}
+input:focus,textarea:focus{border-color:var(--leaf);outline:none}
+input[type=file]{padding:.55em;background:transparent;border-style:dashed}
+textarea{min-height:130px;resize:vertical}
+.msg{grid-column:1/-1;min-height:1.5em;color:var(--leaf);font-weight:600}
+.hp{position:absolute;left:-9999px}
+
+footer{padding:32px 0 48px;font-size:.92rem;color:var(--muted);border-top:1px solid var(--sand)}
+footer .wrap{display:flex;flex-wrap:wrap;gap:10px 32px;justify-content:space-between}
+
+@media (max-width:900px){
+  .hero,.contact{grid-template-columns:1fr;gap:40px}
+  .nav ul{display:none}
+  .facts{grid-template-columns:1fr}
+  .group{grid-template-columns:1fr;gap:20px}
+  .steps{grid-template-columns:1fr 1fr}
+  section{padding:64px 0}
+}
+@media (max-width:560px){
+  .cards{grid-template-columns:1fr 1fr;gap:16px}
+  .cards .card:last-child{grid-column:1/-1;grid-template-columns:1fr 1fr;align-items:center;gap:16px}
+  .steps{grid-template-columns:1fr}
+  form{grid-template-columns:1fr;padding:22px}
+  .logo{font-size:1.25rem;white-space:nowrap}
+  .nav .btn{padding:.6em 1em;font-size:.9rem;white-space:nowrap}
+}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+  <defs>
+    <symbol id="sansewieria" viewBox="0 0 120 150">
+      <path d="M46 104C30 92 22 74 18 58c14 12 26 28 32 46z" fill="#6aa876"/>
+      <path d="M74 104c6-18 16-32 28-42-2 16-10 32-24 42z" fill="#5d9a69"/>
+      <path d="M52 104C36 80 34 52 34 30c12 22 20 48 22 74z" fill="#5d9a69"/>
+      <path d="M68 104c2-26 10-52 22-70 0 22-4 48-18 70z" fill="#3f7350"/>
+      <path d="M60 104C50 74 52 40 57 12c8 28 10 62 5 92z" fill="#4c8358"/>
+      <path d="M38 102h44l-5 42q-17 5-34 0z" fill="#cdbb9f"/>
+      <rect x="35" y="97" width="50" height="9" rx="3" fill="#bca88a"/>
+    </symbol>
+    <symbol id="monstera" viewBox="0 0 120 150">
+      <g stroke="#3f7350" stroke-width="2.6" fill="none" stroke-linecap="round">
+        <path d="M60 108C58 84 50 62 38 46"/><path d="M60 108c2-26 10-46 24-60"/><path d="M60 108V40"/>
+      </g>
+      <path d="M40 50C18 48 8 28 22 10c20 2 30 22 18 40z" fill="#4c8358"/>
+      <path d="M84 50c-16-12-12-34 6-42 16 12 14 36-6 42z" fill="#5d9a69"/>
+      <path d="M60 44C42 34 42 12 60 3c18 9 18 31 0 41z" fill="#3f7350"/>
+      <path d="M28 106h64q0 38-32 38t-32-38z" fill="#f4f1ea"/>
+      <rect x="25" y="102" width="70" height="8" rx="3" fill="#e2dccf"/>
+    </symbol>
+    <symbol id="fikus" viewBox="0 0 120 150">
+      <path d="M60 90V20" stroke="#6b5a45" stroke-width="3" stroke-linecap="round"/>
+      <ellipse cx="46" cy="76" rx="9" ry="16" transform="rotate(-52 46 76)" fill="#4c8358"/>
+      <ellipse cx="74" cy="66" rx="9" ry="16" transform="rotate(52 74 66)" fill="#5d9a69"/>
+      <ellipse cx="46" cy="54" rx="9" ry="16" transform="rotate(-52 46 54)" fill="#3f7350"/>
+      <ellipse cx="74" cy="44" rx="9" ry="16" transform="rotate(52 74 44)" fill="#4c8358"/>
+      <ellipse cx="49" cy="31" rx="8" ry="14" transform="rotate(-42 49 31)" fill="#5d9a69"/>
+      <ellipse cx="60" cy="16" rx="7" ry="13" fill="#6aa876"/>
+      <rect x="41" y="88" width="38" height="56" rx="4" fill="#4a5450"/>
+    </symbol>
+    <symbol id="donica-stozek" viewBox="0 0 120 150">
+      <path d="M26 62h68l-9 78q-25 7-50 0z" fill="#cdbb9f"/>
+      <rect x="22" y="54" width="76" height="13" rx="4" fill="#bca88a"/>
+    </symbol>
+    <symbol id="donica-walec" viewBox="0 0 120 150">
+      <rect x="34" y="26" width="52" height="118" rx="5" fill="#4a5450"/>
+      <rect x="34" y="26" width="52" height="10" rx="5" fill="#5d6964"/>
+    </symbol>
+    <symbol id="donica-misa" viewBox="0 0 120 150">
+      <path d="M10 84h100q0 58-50 58T10 84z" fill="#f4f1ea"/>
+      <rect x="6" y="78" width="108" height="10" rx="4" fill="#e2dccf"/>
+    </symbol>
+  </defs>
+</svg>
+
+<header class="wrap nav">
+  <a class="logo" href="#top"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 22V11" stroke="#4c8358" stroke-width="2" stroke-linecap="round"/><path d="M12 12C6 12 3 8 3 3c6 0 9 4 9 9zM12 15c0-5 3-8 9-8 0 5-3 8-9 8z" fill="#4c8358"/></svg>Zielony Kąt</a>
+  <nav aria-label="Główna nawigacja">
+    <ul>
+      <li><a href="#oferta">Oferta</a></li>
+      <li><a href="#zamowienie">Jak zamówić</a></li>
+      <li><a href="#kontakt">Kontakt</a></li>
+    </ul>
+  </nav>
+  <a class="btn" href="#kontakt">Wyślij zapytanie</a>
+</header>
+
+<main id="top">
+  <div class="wrap hero">
+    <div>
+      <h1>Rośliny i donice dobrane do Twojego wnętrza</h1>
+      <p class="lead">Sprzedajemy rośliny i donice na zamówienie. Wyślij zdjęcie pokoju, biura lub lokalu, a dobierzemy zestaw do światła, miejsca i czasu, jaki masz na podlewanie.</p>
+      <div class="cta">
+        <a class="btn" href="#kontakt">Wyślij zapytanie</a>
+        <a class="link" href="#oferta">Zobacz ofertę</a>
+      </div>
+    </div>
+    <div aria-hidden="true">
+      <div class="arch">
+        <svg viewBox="0 0 120 150"><use href="#sansewieria"/></svg>
+        <svg viewBox="0 0 120 150"><use href="#monstera"/></svg>
+        <svg viewBox="0 0 120 150"><use href="#fikus"/></svg>
+      </div>
+      <div class="shelf"></div>
+    </div>
+  </div>
+
+  <div class="wrap">
+    <div class="facts">
+      <div><b>Na zamówienie</b><span>Każdą roślinę zamawiamy pod konkretne wnętrze, nie z magazynu.</span></div>
+      <div><b>Wycena indywidualna</b><span>Dostępność, cenę i dostawę ustalamy po Twoim zapytaniu.</span></div>
+      <div><b>Zdjęcie wystarczy</b><span>Nie musisz znać nazw gatunków. Pokaż miejsce, resztę dobierzemy.</span></div>
+    </div>
+  </div>
+
+  <section id="oferta">
+    <div class="wrap">
+      <div class="head">
+        <h2>Co możesz u nas zamówić</h2>
+        <p class="muted">Poniżej przykłady. Jeśli szukasz konkretnego gatunku lub rozmiaru donicy, napisz o tym w zapytaniu.</p>
+      </div>
+
+      <div class="group">
+        <header><h3>Rośliny</h3><p>Od małych na parapet po podłogowe do dwóch metrów.</p></header>
+        <div class="cards">
+          <article class="card"><div class="frame sage"><svg viewBox="0 0 120 150" role="img" aria-label="Monstera w białej misie"><use href="#monstera"/></svg></div><h3>Monstera deliciosa</h3><p>Rozproszone światło, podlewanie raz w tygodniu.</p></article>
+          <article class="card"><div class="frame"><svg viewBox="0 0 120 150" role="img" aria-label="Sansewieria w piaskowej donicy"><use href="#sansewieria"/></svg></div><h3>Sansewieria</h3><p>Zniesie cień i dwa tygodnie bez wody.</p></article>
+          <article class="card"><div class="frame sand"><svg viewBox="0 0 120 150" role="img" aria-label="Fikus w grafitowej donicy"><use href="#fikus"/></svg></div><h3>Fikus sprężysty</h3><p>Jasne stanowisko, z dala od przeciągów.</p></article>
+        </div>
+      </div>
+
+      <div class="group">
+        <header><h3>Donice</h3><p>Ceramika, beton i kamionka w stonowanych kolorach.</p></header>
+        <div class="cards">
+          <article class="card"><div class="frame"><svg viewBox="0 0 120 150" role="img" aria-label="Piaskowa donica w kształcie stożka"><use href="#donica-stozek"/></svg></div><h3>Stożek, ceramika szkliwiona</h3><p>Średnice 14–30 cm, kolor piaskowy lub grafit.</p></article>
+          <article class="card"><div class="frame sage"><svg viewBox="0 0 120 150" role="img" aria-label="Wysoka grafitowa donica w kształcie walca"><use href="#donica-walec"/></svg></div><h3>Walec, beton architektoniczny</h3><p>Wysokość 30–60 cm, do roślin podłogowych.</p></article>
+          <article class="card"><div class="frame sand"><svg viewBox="0 0 120 150" role="img" aria-label="Biała niska misa"><use href="#donica-misa"/></svg></div><h3>Misa, kamionka</h3><p>Na kompozycje sukulentów i szerokie parapety.</p></article>
+        </div>
+      </div>
+
+      <div class="group">
+        <header><h3>Gotowe zestawy</h3><p>Rośliny i donice dobrane tak, żeby pasowały do siebie i do miejsca.</p></header>
+        <div class="cards">
+          <article class="card"><div class="frame sand duo"><svg viewBox="0 0 120 150" aria-hidden="true"><use href="#monstera"/></svg><svg viewBox="0 0 120 150" aria-hidden="true"><use href="#sansewieria"/></svg></div><h3>Do mieszkania</h3><p>Trzy rośliny o różnej wysokości i donice w jednym kolorze.</p></article>
+          <article class="card"><div class="frame duo"><svg viewBox="0 0 120 150" aria-hidden="true"><use href="#sansewieria"/></svg><svg viewBox="0 0 120 150" aria-hidden="true"><use href="#fikus"/></svg></div><h3>Do biura</h3><p>Gatunki odporne na klimatyzację i weekendy bez podlewania.</p></article>
+          <article class="card"><div class="frame sage duo"><svg viewBox="0 0 120 150" aria-hidden="true"><use href="#fikus"/></svg><svg viewBox="0 0 120 150" aria-hidden="true"><use href="#monstera"/></svg></div><h3>Do lokalu</h3><p>Duże rośliny podłogowe przy wejściu i na sali.</p></article>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="how" id="zamowienie">
+    <div class="wrap">
+      <div class="head">
+        <h2>Jak przebiega zamówienie</h2>
+        <p class="muted">Nie mamy koszyka ani płatności na stronie. Wszystko ustalamy z Tobą bezpośrednio.</p>
+      </div>
+      <ol class="steps">
+        <li><h3>Wysyłasz zapytanie</h3><p>Opisz miejsce i dołącz zdjęcie wnętrza. Napisz, ile światła tam wpada.</p></li>
+        <li><h3>Dostajesz propozycję</h3><p>W ciągu dwóch dni roboczych odsyłamy zestaw roślin i donic z ceną.</p></li>
+        <li><h3>Potwierdzasz</h3><p>Możesz wymienić dowolny element. Zamawiamy rośliny dopiero po Twojej zgodzie.</p></li>
+        <li><h3>Dostarczamy</h3><p>Przywozimy rośliny posadzone w donicach albo umawiamy odbiór osobisty.</p></li>
+      </ol>
+    </div>
+  </section>
+
+  <section id="kontakt">
+    <div class="wrap contact">
+      <div>
+        <h2>Zapytaj o rośliny do swojego wnętrza</h2>
+        <p class="muted" style="margin-top:16px">Odpowiadamy w ciągu dwóch dni roboczych. Zdjęcie pomoże nam dobrać gatunki i rozmiary.</p>
+        <address>kontakt@zielonykat.example<br>+48 000 000 000<br>pon.–pt. 9:00–17:00</address>
+      </div>
+      <form id="inquiry" novalidate>
+        <div class="field"><label for="name">Imię</label><input id="name" name="name" autocomplete="given-name" required></div>
+        <div class="field"><label for="email">E-mail</label><input id="email" name="email" type="email" autocomplete="email" required></div>
+        <div class="field full"><label for="phone">Telefon <small>(opcjonalnie)</small></label><input id="phone" name="phone" type="tel" autocomplete="tel"></div>
+        <div class="field full"><label for="message">Wiadomość</label><textarea id="message" name="message" required></textarea></div>
+        <div class="field full"><label for="photo">Zdjęcie wnętrza <small>(opcjonalnie, JPG lub PNG)</small></label><input id="photo" name="photo" type="file" accept="image/*"></div>
+        <input class="hp" id="company" name="company" tabindex="-1" autocomplete="off" aria-hidden="true">
+        <div class="field full"><button class="btn" type="submit">Wyślij zapytanie</button></div>
+        <p class="msg" id="msg" role="status"></p>
+      </form>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <p>Projekt koncepcyjny. Marka, dane i treści są fikcyjne. Projekt i wykonanie: Danyil Davydyuk.</p>
+    <p><a href="../index.html">← Wróć do portfolio</a></p>
+  </div>
+</footer>
+
+<script>
+document.getElementById('inquiry').addEventListener('submit', function (e) {
+  e.preventDefault();
+  var msg = document.getElementById('msg');
+  var fields = [
+    ['name', 'Podaj imię.'],
+    ['email', 'Wpisz poprawny adres e-mail.'],
+    ['message', 'Napisz kilka słów o miejscu, do którego szukasz roślin.']
+  ];
+  for (var i = 0; i < fields.length; i++) {
+    var el = document.getElementById(fields[i][0]);
+    if (!el.value.trim() || !el.checkValidity()) { msg.textContent = fields[i][1]; el.focus(); return; }
+  }
+  if (document.getElementById('company').value) { return; }
+  msg.textContent = 'To wersja demonstracyjna: zapytanie nie zostało nigdzie wysłane.';
+});
+</script>
+</body>
+</html>
