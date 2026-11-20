@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Poziomica – remonty i wykończenia wnętrz</title>
+<meta name="description" content="Układanie płytek, wykończenia łazienek, tynki i kompleksowe remonty. Kosztorys i harmonogram przed startem prac.">
+<meta property="og:title" content="Poziomica – remonty i wykończenia wnętrz">
+<meta property="og:description" content="Płytki, łazienki pod klucz, tynki i remonty mieszkań. Policz orientacyjny koszt online.">
+<link rel="stylesheet" href="fonts/fonts.css">
+<style>
+:root{
+  /* layout: everything sits on a tile grid with visible grout gaps; tape-measure rule under the hero; light theme only */
+  --bg:#e9e7e1; --tile:#fbfbf9; --ink:#22252a; --blue:#1f56c9; --tape:#f4c20d; --muted:#5b5e64; --grout:6px;
+  --display:'Red Hat Display',system-ui,sans-serif; --body:'Red Hat Text',system-ui,sans-serif;
+  --wrap:1160px;
+  color-scheme:light;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--ink);font:400 17px/1.6 var(--body)}
+a{color:inherit}
+:focus-visible{outline:3px solid var(--blue);outline-offset:3px}
+.wrap{max-width:var(--wrap);margin:0 auto;padding:0 20px}
+h1,h2,h3{font-family:var(--display);margin:0;line-height:1.04;letter-spacing:-.025em;text-wrap:balance}
+h1{font-size:clamp(2.4rem,5.2vw,4.1rem);font-weight:900}
+h2{font-size:clamp(1.9rem,4vw,3rem);font-weight:900}
+h3{font-size:1.25rem;font-weight:800;line-height:1.2;letter-spacing:-.01em}
+p{margin:0}
+.muted{color:var(--muted)}
+.btn{display:inline-block;font:800 1rem var(--display);text-decoration:none;padding:.95em 1.5em;border:0;cursor:pointer;transition:transform .15s}
+.btn:hover{transform:translate(-2px,-2px)}
+.btn--main{background:var(--blue);color:#fff;box-shadow:4px 4px 0 var(--ink)}
+.btn--alt{background:var(--tile);color:var(--ink);box-shadow:4px 4px 0 var(--ink)}
+
+.nav{display:flex;justify-content:space-between;align-items:center;gap:20px;padding-block:16px}
+.logo{display:flex;align-items:center;gap:.6em;font:900 1.45rem var(--display);letter-spacing:-.03em;text-decoration:none}
+.level{width:52px;height:20px;background:var(--tape);border:2px solid var(--ink);border-radius:4px;position:relative}
+.level::before{content:"";position:absolute;inset:3px 14px;border:2px solid var(--ink);border-radius:8px;background:#d9f2c4}
+.level::after{content:"";position:absolute;left:50%;top:50%;width:7px;height:7px;margin:-3.5px;border-radius:50%;background:var(--tile);border:1.5px solid var(--ink)}
+.nav ul{display:flex;gap:26px;list-style:none;margin:0;padding:0;font-weight:600}
+.nav ul a{text-decoration:none}
+.nav ul a:hover{text-decoration:underline;text-decoration-thickness:3px;text-decoration-color:var(--tape);text-underline-offset:6px}
+.phone{font:800 1.05rem var(--display);text-decoration:none;white-space:nowrap}
+
+.hero{display:grid;grid-template-columns:1.2fr .8fr;gap:var(--grout);padding-top:8px}
+.hero-copy{background:var(--tile);padding:clamp(28px,5vw,60px);display:grid;gap:24px;align-content:center}
+.hero-copy .lead{font-size:1.15rem;color:var(--muted);max-width:32em}
+.cta{display:flex;flex-wrap:wrap;gap:16px}
+.mosaic{position:relative;overflow:hidden;min-height:0}
+.mosaic div{position:absolute;inset:0 0 auto 0;display:grid;grid-template-columns:repeat(5,1fr);gap:var(--grout)}
+.mosaic i{aspect-ratio:1;background:var(--tile)}
+.mosaic i.b{background:var(--blue)}
+.mosaic i.y{background:var(--tape)}
+.mosaic i.k{background:var(--ink)}
+.mosaic i.d{background:linear-gradient(135deg,var(--blue) 50%,var(--tile) 50%)}
+.tape{height:34px;margin-top:var(--grout);background:var(--tape);border:2px solid var(--ink);
+  background-image:repeating-linear-gradient(90deg,var(--ink) 0 2px,transparent 2px 10px),repeating-linear-gradient(90deg,var(--ink) 0 2px,transparent 2px 50px);
+  background-size:auto 9px,auto 18px;background-repeat:repeat-x;background-position:0 0,0 0}
+
+section{padding:76px 0 0}
+.head{display:grid;gap:12px;max-width:42em;margin-bottom:32px}
+
+.tiles{display:grid;grid-template-columns:repeat(6,1fr);gap:var(--grout)}
+.t{background:var(--tile);padding:26px;display:grid;gap:10px;align-content:start;grid-column:span 2}
+.t.wide{grid-column:span 3}
+.t p{color:var(--muted);font-size:.98rem}
+.sw{height:54px;margin-bottom:6px;border:2px solid var(--ink)}
+.sw.grid{background:conic-gradient(from 90deg at 2px 2px,transparent 25%,var(--blue) 0) 0 0/18px 18px}
+.sw.brick{background:linear-gradient(var(--ink) 2px,transparent 2px) 0 0/100% 18px,linear-gradient(90deg,var(--ink) 2px,transparent 2px) 0 0/36px 36px,linear-gradient(90deg,transparent 18px,var(--ink) 18px 20px,transparent 20px) 0 18px/36px 36px,#d7e3f8}
+.sw.plain{background:linear-gradient(100deg,#f1efe9 40%,#e2dfd7 60%)}
+.sw.big{background:linear-gradient(90deg,transparent 49.4%,var(--ink) 49.4% 50.6%,transparent 50.6%),linear-gradient(120deg,#cfd6dd,#eef1f4)}
+.sw.strip{background:repeating-linear-gradient(90deg,var(--tape) 0 14px,var(--ink) 14px 16px)}
+
+.gantt{background:var(--tile);padding:28px;overflow-x:auto}
+.gantt-grid{display:grid;grid-template-columns:230px repeat(12,minmax(34px,1fr));gap:8px 0;min-width:720px;align-items:center}
+.gantt-grid .dh{font:800 .8rem var(--display);text-align:center;color:var(--muted);padding-bottom:6px;border-bottom:2px solid var(--ink)}
+.gantt-grid .dh:first-child{text-align:left}
+.gantt-grid .name{font-weight:600;font-size:.95rem;padding-right:12px}
+.gantt-grid .bar{height:26px;background:var(--blue);font:800 .78rem/26px var(--display);color:#fff;padding-left:8px;white-space:nowrap}
+.gantt-grid .bar.y{background:var(--tape);color:var(--ink)}
+.gantt-grid .bar.k{background:var(--ink)}
+
+.calc{display:grid;grid-template-columns:1fr 1fr;gap:var(--grout)}
+.calc>div{background:var(--tile);padding:clamp(24px,4vw,40px)}
+.calc form{display:grid;gap:20px}
+.field{display:grid;gap:8px}
+label,.lab{font:800 .95rem var(--display)}
+select,input[type=text],input[type=tel],textarea{width:100%;font:inherit;color:var(--ink);background:#fff;border:2px solid var(--ink);border-radius:0;padding:.7em .8em}
+input[type=range]{width:100%;accent-color:var(--blue)}
+.area{display:flex;justify-content:space-between;align-items:baseline}
+.area output{font:900 1.6rem var(--display);font-variant-numeric:tabular-nums}
+.check{display:flex;gap:10px;align-items:flex-start;font-weight:500}
+.check input{width:20px;height:20px;accent-color:var(--blue);margin-top:3px}
+.result{background:var(--ink)!important;color:#fff;display:grid;gap:14px;align-content:center}
+.result .sum{font:900 clamp(1.9rem,4.4vw,3.1rem)/1.05 var(--display);font-variant-numeric:tabular-nums;color:var(--tape)}
+.result p{color:#c9ccd2}
+.result .btn{justify-self:start;margin-top:8px;box-shadow:4px 4px 0 var(--tape)}
+
+.promise{display:grid;grid-template-columns:repeat(4,1fr);gap:var(--grout)}
+.promise div{background:var(--tile);padding:24px;display:grid;gap:8px;align-content:start}
+.promise div:first-child{background:var(--tape)}
+.promise p{color:var(--muted);font-size:.97rem}
+.promise div:first-child p{color:#4d3f00}
+
+.contact{display:grid;grid-template-columns:.8fr 1.2fr;gap:var(--grout)}
+.contact>*{background:var(--tile);padding:clamp(24px,4vw,40px)}
+.contact .info{background:var(--blue);color:#fff;display:grid;gap:14px;align-content:start}
+.contact .info p{color:#dbe6ff}
+.contact form{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+.full{grid-column:1/-1}
+.msg{min-height:1.5em;font-weight:600;color:var(--blue)}
+.hp{position:absolute;left:-9999px}
+
+footer{padding:40px 0 48px;font-size:.9rem;color:var(--muted)}
+footer .wrap{display:flex;flex-wrap:wrap;gap:10px 32px;justify-content:space-between}
+
+@media (max-width:900px){
+  .hero,.calc,.contact{grid-template-columns:1fr}
+  .mosaic{height:46vw}
+  .mosaic div{grid-template-columns:repeat(8,1fr)}
+  .nav ul{display:none}
+  .t,.t.wide{grid-column:span 6}
+  .promise{grid-template-columns:1fr 1fr}
+  section{padding-top:56px}
+}
+@media (max-width:520px){
+  .promise{grid-template-columns:1fr}
+  .contact form{grid-template-columns:1fr}
+  .phone{display:none}
+}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}.btn{transition:none}}
+</style>
+</head>
+<body>
+<header class="wrap nav">
+  <a class="logo" href="#top"><span class="level" aria-hidden="true"></span>Poziomica</a>
+  <nav aria-label="Główna nawigacja">
+    <ul>
+      <li><a href="#uslugi">Usługi</a></li>
+      <li><a href="#harmonogram">Harmonogram</a></li>
+      <li><a href="#kalkulator">Kalkulator</a></li>
+      <li><a href="#kontakt">Kontakt</a></li>
+    </ul>
+  </nav>
+  <a class="phone" href="tel:+48000000000">+48 000 000 000</a>
+</header>
+
+<main id="top">
+  <div class="wrap">
+    <div class="hero">
+      <div class="hero-copy">
+        <h1>Łazienka gotowa w terminie. Zapisanym w umowie.</h1>
+        <p class="lead">Układamy płytki, wykańczamy łazienki, kładziemy tynki i prowadzimy remonty od stanu deweloperskiego. Przed startem dostajesz kosztorys i harmonogram dzień po dniu.</p>
+        <div class="cta">
+          <a class="btn btn--main" href="#kalkulator">Policz orientacyjny koszt</a>
+          <a class="btn btn--alt" href="#kontakt">Zamów bezpłatną wycenę</a>
+        </div>
+      </div>
+      <div class="mosaic" aria-hidden="true"><div><i></i><i class="b"></i><i></i><i class="b"></i><i></i><i class="d"></i><i></i><i></i><i class="b"></i><i class="b"></i><i class="k"></i><i class="y"></i><i class="b"></i><i></i><i></i><i class="d"></i><i></i><i></i><i></i><i class="k"></i><i class="d"></i><i></i><i class="d"></i><i></i><i class="y"></i><i></i><i class="b"></i><i></i><i class="y"></i><i></i><i class="y"></i><i></i><i class="k"></i><i class="b"></i><i class="b"></i><i></i><i></i><i></i><i class="b"></i><i class="d"></i><i class="y"></i><i></i><i></i><i class="b"></i><i></i><i></i><i class="k"></i><i></i><i></i><i></i></div></div>
+    </div>
+    <div class="tape" aria-hidden="true"></div>
+  </div>
+
+  <section id="uslugi">
+    <div class="wrap">
+      <div class="head">
+        <h2>Co robimy</h2>
+        <p class="muted">Pracujemy w mieszkaniach i domach. Jedna ekipa prowadzi prace od demontażu do odbioru.</p>
+      </div>
+      <div class="tiles">
+        <article class="t wide"><div class="sw grid" aria-hidden="true"></div><h3>Układanie płytek i glazury</h3><p>Gres, mozaika i płyty wielkoformatowe do 120 × 280 cm. Fugi cementowe i epoksydowe, cięcie pod kątem 45°.</p></article>
+        <article class="t wide"><div class="sw big" aria-hidden="true"></div><h3>Wykończenia łazienek</h3><p>Hydroizolacja, zabudowa stelaży, odpływy liniowe, biały montaż. Łazienka pod klucz w jednym zleceniu.</p></article>
+        <article class="t"><div class="sw plain" aria-hidden="true"></div><h3>Tynki i gładzie</h3><p>Tynki gipsowe i cementowo-wapienne, gładzie pod malowanie.</p></article>
+        <article class="t"><div class="sw brick" aria-hidden="true"></div><h3>Kompleksowe remonty</h3><p>Mieszkania i domy od stanu deweloperskiego lub po pełnym demontażu.</p></article>
+        <article class="t"><div class="sw strip" aria-hidden="true"></div><h3>Pozostałe prace</h3><p>Sufity podwieszane, malowanie, montaż drzwi i listew.</p></article>
+      </div>
+    </div>
+  </section>
+
+  <section id="harmonogram">
+    <div class="wrap">
+      <div class="head">
+        <h2>Remont łazienki: 12 dni roboczych</h2>
+        <p class="muted">Tak wygląda typowy harmonogram dla łazienki o powierzchni 5 m². Twój dostaniesz razem z kosztorysem.</p>
+      </div>
+      <div class="gantt">
+        <div class="gantt-grid" role="img" aria-label="Harmonogram: demontaż dni 1 do 2, instalacje dni 3 do 4, tynki i wylewka dzień 5, hydroizolacja dni 6 do 7, płytki dni 8 do 10, fugowanie dzień 11, biały montaż i odbiór dzień 12">
+          <span class="dh">Etap</span><span class="dh">1</span><span class="dh">2</span><span class="dh">3</span><span class="dh">4</span><span class="dh">5</span><span class="dh">6</span><span class="dh">7</span><span class="dh">8</span><span class="dh">9</span><span class="dh">10</span><span class="dh">11</span><span class="dh">12</span>
+          <span class="name">Demontaż i wywóz gruzu</span><span class="bar k" style="grid-column:2/4">2 dni</span>
+          <span class="name" style="grid-column:1">Instalacje wodne i elektryczne</span><span class="bar" style="grid-column:4/6">2 dni</span>
+          <span class="name" style="grid-column:1">Tynki i wylewka</span><span class="bar" style="grid-column:6/7"></span>
+          <span class="name" style="grid-column:1">Hydroizolacja i schnięcie</span><span class="bar y" style="grid-column:7/9">2 dni</span>
+          <span class="name" style="grid-column:1">Układanie płytek</span><span class="bar" style="grid-column:9/12">3 dni</span>
+          <span class="name" style="grid-column:1">Fugowanie i silikon</span><span class="bar" style="grid-column:12/13"></span>
+          <span class="name" style="grid-column:1">Biały montaż i odbiór</span><span class="bar k" style="grid-column:13/14"></span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="kalkulator">
+    <div class="wrap">
+      <div class="head">
+        <h2>Policz orientacyjny koszt</h2>
+        <p class="muted">Kalkulator pokazuje widełki za robociznę. Dokładny kosztorys przygotujemy po bezpłatnych oględzinach.</p>
+      </div>
+      <div class="calc">
+        <div>
+          <form id="calc">
+            <div class="field">
+              <label for="work">Rodzaj prac</label>
+              <select id="work">
+                <option value="130,190">Układanie płytek</option>
+                <option value="1800,2600" selected>Łazienka pod klucz</option>
+                <option value="45,65">Tynki gipsowe</option>
+                <option value="55,80">Gładzie i malowanie</option>
+                <option value="1200,1900">Remont kompleksowy mieszkania</option>
+              </select>
+            </div>
+            <div class="field">
+              <div class="area"><label for="area">Powierzchnia</label><output id="areaOut" for="area">5 m²</output></div>
+              <input id="area" type="range" min="2" max="120" step="1" value="5">
+            </div>
+            <label class="check" for="premium"><input id="premium" type="checkbox"><span>Płyty wielkoformatowe lub mozaika (+25%)</span></label>
+          </form>
+        </div>
+        <div class="result" aria-live="polite">
+          <span class="lab">Szacunkowy koszt robocizny</span>
+          <span class="sum" id="sum">9 000 – 13 000 zł</span>
+          <p id="rate">Stawka: 1 800 – 2 600 zł za m². Stawki przykładowe, bez materiałów.</p>
+          <a class="btn btn--main" href="#kontakt">Zamów dokładną wycenę</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="wrap">
+      <div class="promise">
+        <div><h3>Umowa z terminem</h3><p>Data zakończenia jest w umowie. Za każdy dzień opóźnienia z naszej winy obniżamy cenę.</p></div>
+        <div><h3>Kosztorys przed startem</h3><p>Rozpisujemy robociznę pozycja po pozycji. Dodatkowe prace tylko za Twoją pisemną zgodą.</p></div>
+        <div><h3>Zdjęcia z budowy</h3><p>Po każdym dniu pracy dostajesz kilka zdjęć i krótki opis, co zostało zrobione.</p></div>
+        <div><h3>Gwarancja 24 miesiące</h3><p>Na wykonane prace. Usterki zgłoszone w tym czasie usuwamy bez opłat.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="kontakt">
+    <div class="wrap">
+      <div class="contact">
+        <div class="info">
+          <h2>Umów oględziny</h2>
+          <p>Przyjeżdżamy, mierzymy i w ciągu trzech dni roboczych wysyłamy kosztorys. Oględziny są bezpłatne.</p>
+          <p><strong>+48 000 000 000</strong><br>biuro@poziomica.example<br>pon.–sob. 7:00–18:00</p>
+        </div>
+        <form id="contactForm" novalidate>
+          <div class="field"><label for="name">Imię</label><input id="name" name="name" type="text" autocomplete="given-name" required></div>
+          <div class="field"><label for="tel">Telefon</label><input id="tel" name="tel" type="tel" autocomplete="tel" required></div>
+          <div class="field full"><label for="city">Miejscowość</label><input id="city" name="city" type="text" autocomplete="address-level2"></div>
+          <div class="field full"><label for="scope">Zakres prac</label><textarea id="scope" name="scope" rows="4" placeholder="np. łazienka 5 m², demontaż starych płytek, nowa instalacja"></textarea></div>
+          <input class="hp" id="nip" name="nip" type="text" tabindex="-1" autocomplete="off" aria-hidden="true">
+          <div class="field full"><button class="btn btn--main" type="submit" style="justify-self:start">Poproszę o kontakt</button></div>
+          <p class="msg full" id="msg" role="status"></p>
+        </form>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <p>Projekt koncepcyjny. Firma, dane, stawki i treści są fikcyjne. Projekt i wykonanie: Danyil Davydyuk.</p>
+    <p><a href="../index.html">← Wróć do portfolio</a></p>
+  </div>
+</footer>
+
+<script>
+(function () {
+  var work = document.getElementById('work');
+  var area = document.getElementById('area');
+  var premium = document.getElementById('premium');
+  var fmt = new Intl.NumberFormat('pl-PL', { useGrouping: 'always' });
+  function round(n) { var step = n >= 10000 ? 500 : 100; return Math.round(n / step) * step; }
+  function update() {
+    var rates = work.value.split(',').map(Number);
+    var m2 = Number(area.value);
+    var k = premium.checked ? 1.25 : 1;
+    document.getElementById('areaOut').textContent = m2 + ' m²';
+    document.getElementById('sum').textContent = fmt.format(round(rates[0] * m2 * k)) + ' – ' + fmt.format(round(rates[1] * m2 * k)) + ' zł';
+    document.getElementById('rate').textContent = 'Stawka: ' + fmt.format(Math.round(rates[0] * k)) + ' – ' + fmt.format(Math.round(rates[1] * k)) + ' zł za m². Stawki przykładowe, bez materiałów.';
+  }
+  [work, area, premium].forEach(function (el) { el.addEventListener('input', update); });
+  update();
+
+  document.getElementById('contactForm').addEventListener('submit', function (e) {
+    e.preventDefault();
+    var msg = document.getElementById('msg');
+    var name = document.getElementById('name');
+    var tel = document.getElementById('tel');
+    if (!name.value.trim()) { msg.textContent = 'Podaj imię.'; name.focus(); return; }
+    if (tel.value.replace(/\D/g, '').length < 9) { msg.textContent = 'Podaj numer telefonu, minimum 9 cyfr.'; tel.focus(); return; }
+    msg.textContent = 'To wersja demonstracyjna: zgłoszenie nie zostało nigdzie wysłane.';
+  });
+})();
+</script>
+</body>
+</html>
